@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <title>TIMER</title>
+</head>
+
+<body>
+  <div class="container">
+    <!--javascriptで指定するために、idを使用
+    また、id属性は複数指定できない-->
+    <p id="timer">00:00:00</p>
+
+    <div>
+      <button id="start_stop" class="btn btn-lg btn-primary">START</button>
+    </div>
+  </div>
+
+  <script>
+    /*
+    startをグローバル変数にする
+    */
+    var start;
+    //変数を定義
+    var timer_id;
+
+    document.getElementById('start_stop').addEventListener('click', function () {
+      if (this.innerHTML === 'START') {
+        start = new Date();
+
+        /*
+        setInterval(呼び出す変数,間隔のミリ秒)
+        10ミリ秒のたびにgoTimerを呼び出す
+        goTimerを呼び出すたびに、そのデータを記録
+        */
+        timer_id = setInterval(goTimer, 10);
+
+        //STOPにする
+        /*
+        thisとはこのもの自体という意味を持ち、
+        ここではstart_stopというid属性を持った要素指す
+        */
+        //STOPに表示を変える
+        this.innerHTML = 'STOP';
+        //btn-primary、つまり青くなるボタンの要素を消した
+        this.classList.remove('btn-primary');
+        //btn-danger、つまり赤くなるようにボタンの要素を加えた
+        this.classList.add('btn-danger');
+      } else {
+        //動作を停止し、timer_idを呼び出す
+        clearInterval(timer_id);
+
+        //STARTボタンに戻す
+        this.innerHTML = 'STRAT';
+        this.classList.remove('btn-danger');
+        this.classList.add('btn-primary');
+      }
+    });
+
+    //00:00:01のような表記
+    var addZero = function (value) {
+      if (value < 10) {
+        value = '0' + value;
+      }
+      return value;
+    }
+
+    var goTimer = function () {
+      var now = new Date();
+
+      var milli = now.getTime() - start.getTime();
+      //Math.floorとは少数以下を切り落としてくる
+      var seconds = Math.floor(milli / 1000);
+      var minutes = Math.floor(seconds / 60);
+      var hours = Math.floor(minutes / 60);
+
+      //秒や分が60を超えないように表記する
+      seconds = seconds - minutes * 60;
+      minutes = minutes - hours * 60;
+
+      hours = addZero(hours);
+      minutes = addZero(minutes);
+      seconds = addZero(seconds);
+
+      document.getElementById('timer').innerHTML = hours + ':' + minutes + ':' + seconds;
+    }
+  </script>
+
+</body>
+
+</html>

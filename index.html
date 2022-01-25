@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <title>TIMER</title>
+</head>
+
+<body>
+  <div class="container">
+    <!--javascriptで指定するために、idを使用
+    また、id属性は複数指定できない-->
+    <p id="timer">00:00:00</p>
+
+    <div>
+      <button id="start_stop" class="btn btn-lg btn-primary">START</button>
+    </div>
+  </div>
+
+  <script>
+    /*
+    0を追加する
+    functionはretrun返り値を示さなければならない
+    これにより共通部分を簡略化できる
+    */
+    var addZero = function (value) {
+      //if (条件) {処理内容}
+      if (value < 10) {
+        value = '0' + value;
+      }
+
+      return value;
+    }
+
+    /*
+    下記のような書き方でも可能
+    function addZero(value) {
+      ...
+    }
+    */
+
+    /*
+    addEventListenerには、操作の種類と動作を書かなけらばならない
+    'click'が操作方法
+    function(){ここにクリックした際の処理}
+    */
+    document.getElementById('start_stop').addEventListener('click', function () {
+
+      //Dateオブジェクトを使って新しいインスタンスを作る
+      var now = new Date();
+      var seconds = now.getSeconds();//秒を取得
+      seconds = addZero(seconds);
+
+      var minutes = now.getMinutes();//分を取得
+      minutes = addZero(minutes);
+
+
+      var hours = now.getHours();//時を取得
+      hours = addZero(hours);
+
+      /*
+      .getElementByIdとは、Id属性を使って、Elementを取得するということ
+      javascriptではドット.を使って数珠繋ぎにすることができる
+      .removeはその要素を削除する
+      innerHTMLとはプロパティと呼ばれるもの、プロパティとは見た目や文章の内容などを指す
+      下記の場合だと、timerという要素のインナーのHTMLの内容に「00:00:01」を代入させる
+      これで画面に変化がおこる
+      */
+      document.getElementById('timer').innerHTML = hours + ':' + minutes + ':' + seconds/*'00:00:01'*/;
+    });
+  </script>
+
+</body>
+
+</html>
